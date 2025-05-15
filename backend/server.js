@@ -11,6 +11,16 @@ app.get('/', (req, res) => {
 	res.send('Hello')
 })
 
+app.get('/api/tasks', async (req, res) => {
+	try {
+		const tasks = await Task.find()
+		res.status(200).json({ success: true, data: tasks })
+	} catch (error) {
+		console.error('Error fetching tasks:', error)
+		res.status(500).json({ success: false, message: 'Error fetching tasks' })
+	}
+})
+
 app.post('/api/tasks', async (req, res) => {
 	const task = req.body
 
