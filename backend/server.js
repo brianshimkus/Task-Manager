@@ -41,6 +41,25 @@ app.post('/api/tasks', async (req, res) => {
 	}
 })
 
+app.delete('/api/tasks/:id', async (req, res) => {
+	const { id } = req.params
+
+	if (!id) {
+		return res.status(400).json({ error: 'Task ID is required' })
+	}
+
+	try {
+		const deletedTask = await Task.findByIdAndDelete(id)
+		if (!deletedTask) {
+			return res.status(404).json({ success: false, message: 'Task not found' })
+		}
+		res.status(200).json({ success: true, data: deletedTask })
+	} catch (error) {
+		console.error('Error deleting task:', error)
+		res.status(500).json({ success: false, message: 'Error deleting task' })
+	}
+})
+
 const startServer = async () => {
 	try {
 		await mongoose.connect(process.env.MONGO_URI)
