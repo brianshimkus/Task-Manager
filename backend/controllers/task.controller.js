@@ -14,10 +14,14 @@ export const createTask = async (req, res) => {
 	const task = req.body
 
 	if (!task.title) {
-		return res.status(400).json({ error: 'Title is required' })
+		return res
+			.status(400)
+			.json({ success: false, message: 'Title is required' })
 	}
 	if (!task.dueDate) {
-		return res.status(400).json({ error: 'Due date is required' })
+		return res
+			.status(400)
+			.json({ success: false, message: 'Due date is required' })
 	}
 
 	const newTask = new Task(task)
@@ -35,7 +39,9 @@ export const updateTask = async (req, res) => {
 	const updatedTask = req.body
 
 	if (!id) {
-		return res.status(400).json({ error: 'Task ID is required' })
+		return res
+			.status(400)
+			.json({ success: false, message: 'Task ID is required' })
 	}
 
 	try {
@@ -54,7 +60,9 @@ export const deleteTask = async (req, res) => {
 	const { id } = req.params
 
 	if (!id) {
-		return res.status(400).json({ error: 'Task ID is required' })
+		return res
+			.status(400)
+			.json({ success: false, message: 'Task ID is required' })
 	}
 
 	try {
