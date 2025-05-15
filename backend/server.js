@@ -1,12 +1,14 @@
 import express from 'express'
 import mongoose from 'mongoose'
 
+import taskRoutes from './routes/task.route.js'
+
 const app = express()
 const PORT = process.env.PORT || 5000
 
-app.get('/', (req, res) => {
-	res.send('Hello')
-})
+app.use(express.json())
+
+app.use('/api/tasks', taskRoutes)
 
 const startServer = async () => {
 	try {
