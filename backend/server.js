@@ -1,84 +1,14 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import Task from './models/task.model.js'
+
+import taskRoutes from './routes/task.route.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
 
-app.get('/', (req, res) => {
-	res.send('Hello')
-})
-
-app.get('/api/tasks', async (req, res) => {
-	try {
-		const tasks = await Task.find()
-		res.status(200).json({ success: true, data: tasks })
-	} catch (error) {
-		console.error('Error fetching tasks:', error)
-		res.status(500).json({ success: false, message: 'Error fetching tasks' })
-	}
-})
-
-app.post('/api/tasks', async (req, res) => {
-	const task = req.body
-
-	if (!task.title) {
-		return res.status(400).json({ error: 'Title is required' })
-	}
-	if (!task.dueDate) {
-		return res.status(400).json({ error: 'Due date is required' })
-	}
-
-	const newTask = new Task(task)
-	try {
-		await newTask.save()
-		res.status(201).json({ success: true, data: newTask })
-	} catch (error) {
-		console.error('Error creating task:', error)
-		res.status(500).json({ success: false, message: 'Error creating task' })
-	}
-})
-
-app.put('/api/tasks/:id', async (req, res) => {
-	const { id } = req.params
-	const updatedTask = req.body
-
-	if (!id) {
-		return res.status(400).json({ error: 'Task ID is required' })
-	}
-
-	try {
-		const task = await Task.findByIdAndUpdate(id, updatedTask, { new: true })
-		if (!task) {
-			return res.status(404).json({ success: false, message: 'Task not found' })
-		}
-		res.status(200).json({ success: true, data: task })
-	} catch (error) {
-		console.error('Error updating task:', error)
-		res.status(500).json({ success: false, message: 'Error updating task' })
-	}
-})
-
-app.delete('/api/tasks/:id', async (req, res) => {
-	const { id } = req.params
-
-	if (!id) {
-		return res.status(400).json({ error: 'Task ID is required' })
-	}
-
-	try {
-		const deletedTask = await Task.findByIdAndDelete(id)
-		if (!deletedTask) {
-			return res.status(404).json({ success: false, message: 'Task not found' })
-		}
-		res.status(200).json({ success: true, data: deletedTask })
-	} catch (error) {
-		console.error('Error deleting task:', error)
-		res.status(500).json({ success: false, message: 'Error deleting task' })
-	}
-})
+app.use('/api/tasks', taskRoutes)
 
 const startServer = async () => {
 	try {
