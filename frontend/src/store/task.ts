@@ -13,10 +13,10 @@ export const useTaskStore = create((set) => ({
 	tasks: [],
 	setTasks: (tasks: []) => set({ tasks }),
 	createTask: async (newTask: Task) => {
-		if (!newTask.title || !newTask.description) {
+		if (!newTask.title) {
 			return {
 				success: false,
-				message: 'Title and description are required',
+				message: 'Title is required',
 			}
 		}
 		const res = await fetch('/api/tasks', {
