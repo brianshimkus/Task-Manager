@@ -9,10 +9,22 @@ interface TaskStoreState {
 	tasks: Task[]
 }
 
-export const useTaskStore = create((set) => ({
+interface CreateTaskResponse {
+	success: boolean
+	message: string
+}
+
+interface UseTaskStoreActions {
+	setTasks: (tasks: Task[]) => void
+	createTask: (newTask: Task) => Promise<CreateTaskResponse>
+}
+
+type UseTaskStore = TaskStoreState & UseTaskStoreActions
+
+export const useTaskStore = create<UseTaskStore>((set) => ({
 	tasks: [],
-	setTasks: (tasks: []) => set({ tasks }),
-	createTask: async (newTask: Task) => {
+	setTasks: (tasks: Task[]) => set({ tasks }),
+	createTask: async (newTask: Task): Promise<CreateTaskResponse> => {
 		if (!newTask.title) {
 			return {
 				success: false,

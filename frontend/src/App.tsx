@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { useTaskStore } from './store/task.ts'
+import { useTaskStore } from './store/task'
 
 export default function App() {
 	const [newTask, setNewTask] = useState({
@@ -17,7 +17,8 @@ export default function App() {
 		) => Promise<{ success: boolean; message: string }>
 	}
 
-	const handleAddTask = async () => {
+	const handleAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
 		const { success, message } = await createTask(newTask)
 		if (!success) {
 			toast.error(`Error: ${message}`)
