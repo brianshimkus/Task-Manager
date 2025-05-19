@@ -18,11 +18,6 @@ export const createTask = async (req, res) => {
 			.status(400)
 			.json({ success: false, message: 'Title is required' })
 	}
-	if (!task.dueDate) {
-		return res
-			.status(400)
-			.json({ success: false, message: 'Due date is required' })
-	}
 
 	const newTask = new Task(task)
 	try {
