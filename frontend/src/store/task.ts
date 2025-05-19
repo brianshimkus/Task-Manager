@@ -1,9 +1,18 @@
 import { create } from 'zustand'
 
+interface Task {
+	title: string
+	description: string
+}
+
+interface TaskStoreState {
+	tasks: Task[]
+}
+
 export const useTaskStore = create((set) => ({
 	tasks: [],
-	setTasks: (tasks) => set({ tasks }),
-	createTask: async (newTask) => {
+	setTasks: (tasks: []) => set({ tasks }),
+	createTask: async (newTask: Task) => {
 		if (!newTask.title || !newTask.description) {
 			return {
 				success: false,
@@ -18,6 +27,12 @@ export const useTaskStore = create((set) => ({
 			body: JSON.stringify(newTask),
 		})
 		const data = await res.json()
-		set((state) => ({ tasks: [...state.tasks, data.data] }))
+		set((state: TaskStoreState) => ({
+			tasks: [...state.tasks, data.data as Task],
+		}))
+		return {
+			success: true,
+			message: 'Task created successfully',
+		}
 	},
 }))
