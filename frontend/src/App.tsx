@@ -10,7 +10,12 @@ export default function App() {
 		dueDate: '',
 	})
 
-	const { createTask } = useTaskStore()
+	// Replace 'TaskStoreType' with the actual type/interface of your store if you have one
+	const { createTask } = useTaskStore() as {
+		createTask: (
+			task: typeof newTask
+		) => Promise<{ success: boolean; message: string }>
+	}
 
 	const handleAddTask = async () => {
 		const { success, message } = await createTask(newTask)
